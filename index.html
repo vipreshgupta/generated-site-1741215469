@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Travel Itinerary Planner</title>
+    <style>
+        /* Color Scheme */
+        :root {
+            --primary-color: #4CAF50;
+            --accent-color: #FF9800;
+            --background-color: #f8f8f8;
+            --text-color: #333;
+            --highlight-color: #e6f7ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: #fff;
+            padding-top: 20px;
+            min-height: 70px;
+            border-bottom: 3px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 1.8em;
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            display: flex;
+        }
+
+        nav li {
+            display: inline;
+            padding: 0 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Sections */
+        section {
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Form Elements */
+        input[type="text"],
+        input[type="date"],
+        select,
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: calc(100% - 22px);
+            font-size: 1em;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: auto;
+            padding: 10px 20px;
+        }
+
+        button:hover {
+            background-color: #e08500;
+        }
+
+        /* Itinerary Items */
+        .itinerary-item {
+            background: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .itinerary-item .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav li {
+                text-align: center;
+                padding: 10px 0;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .itinerary-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .itinerary-item .actions {
+                margin-top: 10px;
+            }
+        }
+
+        /* Accessibility */
+        [aria-label], [role="button"] {
+            cursor: pointer;
+        }
+
+        /* Interactive Elements */
+        .draggable {
+            cursor: grab;
+        }
+
+        .weather-widget, .budget-tracker {
+            background-color: var(--highlight-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        /* Additional Recommendations */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .interactive-map {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Smart Travel Planner</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('create-itinerary')">Create Itinerary</a></li>
+                    <li><a href="#" onclick="showSection('destinations')">Destinations</a></li>
+                    <li><a href="#" onclick="showSection('activities')">Activities</a></li>
+                    <li><a href="#" onclick="showSection('budget-tracker')">Budget Tracker</a></li>
+                    <li><a href="#" onclick="showSection('settings')">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="create-itinerary" class="container">
+        <h2 class="section-title">Create Your Itinerary</h2>
+        <div>
+            <label for="destination">Destination:</label>
+            <input type="text" id="destination" placeholder="Enter destination" aria-label="Destination">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" aria-label="Start Date">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" aria-label="End Date">
+            <button onclick="addItineraryItem()">Add to Itinerary</button>
+        </div>
+        <div id="itinerary-list">
+            <!-- Itinerary items will be added here -->
+        </div>
+    </section>
+
+    <section id="destinations" class="container" style="display: none;">
+        <h2 class="section-title">Explore Destinations</h2>
+        <img src="https://source.unsplash.com/1600x900/?travel" alt="Travel Destination" style="width:100%; border-radius: 8px; margin-bottom: 20px;">
+        <p>Discover new places and get inspired for your next adventure!</p>
+    </section>
+
+    <section id="activities" class="container" style="display: none;">
+        <h2 class="section-title">Plan Activities</h2>
+        <p>Add activities to your itinerary and make the most of your trip.</p>
+    </section>
+
+    <section id="budget-tracker" class="container" style="display: none;">
+        <h2 class="section-title">Budget Tracker</h2>
+        <div class="budget-tracker">
+            <p>Total Budget: <span id="total-budget">0</span></p>
+            <p>Spent: <span id="total-spent">0</span></p>
+            <p>Remaining: <span id="budget-remaining">0</span></p>
+        </div>
+    </section>
+
+    <section id="settings" class="container" style="display: none;">
+        <h2 class="section-title">Settings</h2>
+        <p>Customize your preferences and settings here.</p>
+    </section>
+    <section id="map" class="container">
+        <h2 class="section-title">Interactive Map</h2>
+        <div class="interactive-map" id="map-container">
+            <!-- Map will be loaded here -->
+        </div>
+    </section>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = ['create-itinerary', 'destinations', 'activities', 'budget-tracker', 'settings'];
+            sections.forEach(id => {
+                document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+            });
+        }
+
+        function addItineraryItem() {
+            const destination = document.getElementById('destination').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!destination || !startDate || !endDate) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const itineraryList = document.getElementById('itinerary-list');
+            const newItem = document.createElement('div');
+            newItem.classList.add('itinerary-item');
+            newItem.innerHTML = `
+                <span>${destination}</span>
+                <span>${startDate} - ${endDate}</span>
+                <div class="actions">
+                    <button onclick="editItem(this)">Edit</button>
+                    <button onclick="deleteItem(this)">Delete</button>
+                </div>
+            `;
+            itineraryList.appendChild(newItem);
+
+            // Clear input fields after adding
+            document.getElementById('destination').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+        }
+
+        function editItem(button) {
+            const item = button.closest('.itinerary-item');
+            const spans = item.querySelectorAll('span');
+            const destination = prompt("Edit Destination", spans[0].textContent);
+            const dates = prompt("Edit Dates (Start - End)", spans[1].textContent);
+
+            if (destination && dates) {
+                spans[0].textContent = destination;
+                spans[1].textContent = dates;
+            }
+        }
+
+        function deleteItem(button) {
+            const item = button.closest('.itinerary-item');
+            item.remove();
+        }
+        function loadMap() {
+            // Placeholder for map loading logic
+            const mapContainer = document.getElementById('map-container');
+            mapContainer.innerHTML = '<p>Map will be loaded here. Integration with a mapping service like Google Maps or Leaflet.js would be implemented here.</p>';
+        }
+
+        // Call loadMap on window load
+        window.onload = loadMap;
+    </script>
+</body>
+</html>
